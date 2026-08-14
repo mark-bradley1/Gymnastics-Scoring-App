@@ -1,6 +1,8 @@
 package org.example.gymnasticsscore.service;
 
 import org.example.gymnasticsscore.dto.ScoresDTO;
+import org.example.gymnasticsscore.exception.DuplicateResourceException;
+import org.example.gymnasticsscore.exception.ResourceNotFoundException;
 import org.example.gymnasticsscore.model.Gymnast;
 import org.example.gymnasticsscore.model.Meet;
 import org.example.gymnasticsscore.model.Scores;
@@ -30,32 +32,24 @@ public class ScoresService {
 
     public Scores createScore(ScoresDTO dto) {
 
-        if (dto.getValue() < 0 || dto.getValue() >10) {
-            throw new IllegalArgumentException(
-                    "Score must be between 0 and 10"
-            );
-        }
-
-        boolean alreadyExists =
-                scoresRepository.existsByGymnast_IdAndMeet_IdAndEvent(
-                        dto.getGymnastId(),
-                        dto.getMeetId(),
-                        dto.getEvent()
-                );
-
-        if (alreadyExists) {
-            throw new IllegalArgumentException(
-                    "A score already exists for this gymnast, meet and event."
-            );
-        }
-
         Gymnast gymnast = gymnastRepository.findById(dto.getGymnastId())
-                .orElseThrow(() -> new RuntimeException("Gymnast not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Gymnast not found"));
 
         Meet meet = meetRepository.findById(dto.getMeetId())
-                .orElseThrow(() -> new RuntimeException("Meet not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Meet not found"));
+
+        if (scoresRepository.existsByGymnast_IdAndMeet_IdAndEvent(
+                dto.getGymnastId(),
+                dto.getMeetId(),
+                dto.getEvent())) {
+
+            throw new DuplicateResourceException(
+                    "A score for this gymnast, meet, and event already exists"
+            );
+        }
 
         Scores score = new Scores();
+
         score.setValue(dto.getValue());
         score.setEvent(dto.getEvent());
         score.setGymnast(gymnast);
