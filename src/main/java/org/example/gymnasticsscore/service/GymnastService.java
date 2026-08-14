@@ -63,4 +63,11 @@ public class GymnastService {
 
         return gymnastRepository.save(gymnast);
     }
+
+    public void deleteGymnast(Long id) {
+        Gymnast gymnast = gymnastRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Gymnast not found"));
+
+        gymnastRepository.delete(gymnast);
+    }
 }

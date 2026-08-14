@@ -38,4 +38,9 @@ public class GymnastController {
             @RequestBody GymnastDTO dto) {
         return gymnastService.updateGymnast(id, dto);
     }
+
+    @DeleteMapping("/{id}")
+    public void deleteGymnast(@PathVariable Long id) {
+        gymnastService.deleteGymnast(id);
+    }
 }
