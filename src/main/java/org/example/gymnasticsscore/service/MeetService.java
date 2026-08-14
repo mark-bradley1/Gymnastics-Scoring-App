@@ -45,4 +45,12 @@ public class MeetService {
 
         return meetRepository.save(meet);
     }
+
+    public void deleteMeet(Long id) {
+
+        Meet meet = meetRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Meet not found"));
+
+        meetRepository.delete(meet);
+    }
 }

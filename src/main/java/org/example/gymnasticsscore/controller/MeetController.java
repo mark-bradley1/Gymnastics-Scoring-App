@@ -1,5 +1,6 @@
 package org.example.gymnasticsscore.controller;
 
+import jakarta.validation.Valid;
 import org.example.gymnasticsscore.dto.MeetDTO;
 import org.example.gymnasticsscore.model.Meet;
 import org.example.gymnasticsscore.service.MeetService;
@@ -18,7 +19,7 @@ public class MeetController {
     }
 
     @PostMapping
-    public Meet createMeet(@RequestBody MeetDTO dto) {
+    public Meet createMeet(@Valid @RequestBody MeetDTO dto) {
         return meetService.createMeet(dto);
     }
 
@@ -35,8 +36,13 @@ public class MeetController {
     @PutMapping("/{id}")
     public Meet updateMeet(
             @PathVariable Long id,
-            @RequestBody MeetDTO dto) {
+            @Valid @RequestBody MeetDTO dto) {
 
         return meetService.updateMeet(id, dto);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteMeet(@PathVariable Long id) {
+        meetService.deleteMeet(id);
     }
 }
