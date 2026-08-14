@@ -1,6 +1,7 @@
 package org.example.gymnasticsscore.service;
 
 import org.example.gymnasticsscore.dto.MeetDTO;
+import org.example.gymnasticsscore.exception.ResourceNotFoundException;
 import org.example.gymnasticsscore.model.Meet;
 import org.example.gymnasticsscore.repository.MeetRepository;
 import org.springframework.stereotype.Service;
@@ -17,8 +18,8 @@ public class MeetService {
     }
 
     public Meet createMeet(MeetDTO dto) {
-
         Meet meet = new Meet();
+
         meet.setName(dto.getName());
         meet.setDate(dto.getDate());
 
@@ -31,6 +32,6 @@ public class MeetService {
 
     public Meet getMeetById(Long id) {
         return meetRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Meet not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Meet not found"));
     }
 }
