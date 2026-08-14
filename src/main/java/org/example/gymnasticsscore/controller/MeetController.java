@@ -2,7 +2,7 @@ package org.example.gymnasticsscore.controller;
 
 import org.example.gymnasticsscore.dto.MeetDTO;
 import org.example.gymnasticsscore.model.Meet;
-import org.example.gymnasticsscore.repository.MeetRepository;
+import org.example.gymnasticsscore.service.MeetService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,22 +11,24 @@ import java.util.List;
 @RequestMapping("/meets")
 public class MeetController {
 
-    private final MeetRepository meetRepository;
+    private final MeetService meetService;
 
-    public MeetController(MeetRepository meetRepository) {
-        this.meetRepository = meetRepository;
+    public MeetController(MeetService meetService) {
+        this.meetService = meetService;
     }
 
     @PostMapping
     public Meet createMeet(@RequestBody MeetDTO dto) {
-        Meet meet = new Meet();
-        meet.setName(dto.getName());
-        meet.setDate(dto.getDate());
-        return meetRepository.save(meet);
+        return meetService.createMeet(dto);
     }
 
     @GetMapping
     public List<Meet> getAllMeets() {
-        return meetRepository.findAll();
+        return meetService.getAllMeets();
+    }
+
+    @GetMapping("/{id}")
+    public Meet getMeetById(@PathVariable Long id) {
+        return meetService.getMeetById(id);
     }
 }

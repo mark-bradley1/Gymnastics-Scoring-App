@@ -1,10 +1,8 @@
 package org.example.gymnasticsscore.controller;
 
 import org.example.gymnasticsscore.model.Gymnast;
-import org.example.gymnasticsscore.repository.GymnastRepository;
 import org.example.gymnasticsscore.dto.GymnastDTO;
-import org.example.gymnasticsscore.model.Gym;
-import org.example.gymnasticsscore.repository.GymRepository;
+import org.example.gymnasticsscore.service.GymnastService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,31 +11,31 @@ import java.util.List;
 @RequestMapping("/gymnasts")
 public class GymnastController {
 
-    private final GymnastRepository gymnastRepository;
-    private final GymRepository gymRepository;
+    private final GymnastService gymnastService;
 
-    public GymnastController(GymnastRepository gymnastRepository, GymRepository gymRepository) {
-        this.gymnastRepository = gymnastRepository;
-        this.gymRepository = gymRepository;
+    public GymnastController(GymnastService gymnastService) {
+        this.gymnastService = gymnastService;
     }
 
     @PostMapping
     public Gymnast createGymnast(@RequestBody GymnastDTO dto) {
-        Gym gym = gymRepository.findById(dto.getGymId())
-                .orElseThrow(() -> new RuntimeException("Gym not found"));
-
-        Gymnast gymnast = new Gymnast();
-        gymnast.setName(dto.getName());
-        gymnast.setAge(dto.getAge());
-        gymnast.setLevel(dto.getLevel());
-        gymnast.setGender(dto.getGender());
-        gymnast.setGym(gym);
-
-        return gymnastRepository.save(gymnast);
+        return gymnastService.createGymnast(dto);
     }
 
     @GetMapping
     public List<Gymnast> getAllGymnasts() {
-        return gymnastRepository.findAll();
+        return gymnastService.getAllGymnasts();
+    }
+
+    @GetMapping("/{id}")
+    public Gymnast getGymnast(@PathVariable Long id) {
+        return gymnastService.getGymnast(id);
+    }
+
+    @PutMapping("/{id}")
+    public Gymnast updateGymnast(
+            @PathVariable Long id,
+            @RequestBody GymnastDTO dto) {
+        return gymnastService.updateGymnast(id, dto);
     }
 }
