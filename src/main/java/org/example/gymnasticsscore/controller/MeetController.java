@@ -31,4 +31,12 @@ public class MeetController {
     public Meet getMeetById(@PathVariable Long id) {
         return meetService.getMeetById(id);
     }
+
+    @PutMapping("/{id}")
+    public Meet updateMeet(
+            @PathVariable Long id,
+            @RequestBody MeetDTO dto) {
+
+        return meetService.updateMeet(id, dto);
+    }
 }

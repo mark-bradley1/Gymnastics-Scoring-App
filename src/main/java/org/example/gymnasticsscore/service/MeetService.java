@@ -34,4 +34,15 @@ public class MeetService {
         return meetRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Meet not found"));
     }
+
+    public Meet updateMeet(Long id, MeetDTO dto) {
+
+        Meet meet = meetRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Meet not found"));
+
+        meet.setName(dto.getName());
+        meet.setDate(dto.getDate());
+
+        return meetRepository.save(meet);
+    }
 }
