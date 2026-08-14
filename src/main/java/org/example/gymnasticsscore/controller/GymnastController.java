@@ -4,6 +4,7 @@ import org.example.gymnasticsscore.model.Gymnast;
 import org.example.gymnasticsscore.dto.GymnastDTO;
 import org.example.gymnasticsscore.service.GymnastService;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 import java.util.List;
 
@@ -18,7 +19,7 @@ public class GymnastController {
     }
 
     @PostMapping
-    public Gymnast createGymnast(@RequestBody GymnastDTO dto) {
+    public Gymnast createGymnast(@Valid @RequestBody GymnastDTO dto) {
         return gymnastService.createGymnast(dto);
     }
 
@@ -35,7 +36,7 @@ public class GymnastController {
     @PutMapping("/{id}")
     public Gymnast updateGymnast(
             @PathVariable Long id,
-            @RequestBody GymnastDTO dto) {
+            @Valid @RequestBody GymnastDTO dto) {
         return gymnastService.updateGymnast(id, dto);
     }
 
