@@ -101,6 +101,14 @@ public class ScoresService {
                 && score.getEvent() == dto.getEvent();
     }
 
+    public void deleteScore(Long id) {
+
+        Scores score = scoresRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Score not found"));
+
+        scoresRepository.delete(score);
+    }
+
     public List<Scores> getAllScores() {
         return scoresRepository.findAll();
     }

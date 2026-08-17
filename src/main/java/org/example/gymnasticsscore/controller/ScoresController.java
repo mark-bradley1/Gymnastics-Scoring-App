@@ -44,4 +44,9 @@ public class ScoresController {
 
         return scoresService.updateScore(id, dto);
     }
+
+    @DeleteMapping("/{id}")
+    public void deleteScore(@PathVariable Long id) {
+        scoresService.deleteScore(id);
+    }
 }
