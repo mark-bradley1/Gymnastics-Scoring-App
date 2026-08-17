@@ -58,6 +58,49 @@ public class ScoresService {
         return scoresRepository.save(score);
     }
 
+    public Scores getScoreById(Long id) {
+        return scoresRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Score not found"));
+    }
+
+    public Scores updateScore(Long id, ScoresDTO dto) {
+
+        Scores score = scoresRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Score not found"));
+
+        Gymnast gymnast = gymnastRepository.findById(dto.getGymnastId())
+                .orElseThrow(() -> new ResourceNotFoundException("Gymnast not found"));
+
+        Meet meet = meetRepository.findById(dto.getMeetId())
+                .orElseThrow(() -> new ResourceNotFoundException("Meet not found"));
+
+        boolean duplicateExists =
+                scoresRepository.existsByGymnast_IdAndMeet_IdAndEvent(
+                        dto.getGymnastId(),
+                        dto.getMeetId(),
+                        dto.getEvent()
+                );
+
+        if (duplicateExists && !isSameScore(score, dto)) {
+            throw new DuplicateResourceException(
+                    "A score for this gymnast, meet, and event already exists"
+            );
+        }
+
+        score.setValue(dto.getValue());
+        score.setEvent(dto.getEvent());
+        score.setGymnast(gymnast);
+        score.setMeet(meet);
+
+        return scoresRepository.save(score);
+    }
+
+    private boolean isSameScore(Scores score, ScoresDTO dto) {
+        return score.getGymnast().getId().equals(dto.getGymnastId())
+                && score.getMeet().getId().equals(dto.getMeetId())
+                && score.getEvent() == dto.getEvent();
+    }
+
     public List<Scores> getAllScores() {
         return scoresRepository.findAll();
     }

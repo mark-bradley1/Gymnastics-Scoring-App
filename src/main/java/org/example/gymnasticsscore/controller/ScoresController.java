@@ -31,4 +31,17 @@ public class ScoresController {
     public List<Scores> getScoresByGym(@PathVariable String gymName) {
         return scoresService.getScoresByGym(gymName);
     }
+
+    @GetMapping("/{id}")
+    public Scores getScoreById(@PathVariable Long id) {
+        return scoresService.getScoreById(id);
+    }
+
+    @PutMapping("/{id}")
+    public Scores updateScore(
+            @PathVariable Long id,
+            @RequestBody ScoresDTO dto) {
+
+        return scoresService.updateScore(id, dto);
+    }
 }
